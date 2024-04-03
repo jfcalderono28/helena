@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(const Pills());
+void main() => runApp(const Calendar());
 
-class Pills extends StatelessWidget {
-  const Pills({super.key});
+class Calendar extends StatelessWidget {
+  const Calendar({super.key});
 
   Widget _list() {
     return Expanded(
         child: ListView.separated(
-      itemCount: 5,
+      itemCount: 10,
       itemBuilder: (BuildContext context, index) =>
-          _item("Acetaminofen", "1:00 pm"),
+          _item("Medicina general", "9:00 am", "Kr 21 este n° 33 02"),
       separatorBuilder: (context, index) {
         return Container(
           color: Colors.grey[300],
@@ -20,14 +20,15 @@ class Pills extends StatelessWidget {
     ));
   }
 
-  Widget _item(String name, String hours) {
+  Widget _item(String name, String hours, String description) {
     return ListTile(
-        leading: TextButton(
-            onPressed: () {},
-            child: Text(
-              name,
-              style: const TextStyle(fontSize: 16),
-            )),
+        title: Text(name),
+        subtitle: Text(
+          description,
+          style: const TextStyle(
+            fontSize: 12,
+          ),
+        ),
         trailing: Text(hours, style: const TextStyle(fontSize: 14)));
   }
 
@@ -45,12 +46,18 @@ class Pills extends StatelessWidget {
               child: Title(
                 color: Colors.black,
                 child: const Text(
-                  "Próximos medicamentos",
+                  "Proximas citas",
                   style: TextStyle(fontSize: 18),
                 ),
               ),
             ),
+            const SizedBox(
+              height: 25,
+            ),
             _list(),
+            const SizedBox(
+              height: 25,
+            ),
           ],
         ),
       ),
@@ -64,10 +71,7 @@ class Pills extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
             backgroundColor: const Color(0xFF019C71),
-            title: const Text(
-              'Medicamentos',
-              style: TextStyle(fontSize: 20),
-            )),
+            title: const Text('Calendario', style: TextStyle(fontSize: 20))),
         body: _body(),
         bottomNavigationBar: BottomAppBar(
           color: const Color(0xFF019C71),

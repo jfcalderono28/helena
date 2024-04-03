@@ -28,7 +28,15 @@ class AddPageState extends State<AddPage> {
 
   Widget _inicial(index) {
     if (index == -1) {
-      return const Text("Selecciona una opción");
+      return const Column(
+        children: [
+          SizedBox(height: 150),
+          Text(
+            "Selecciona una opción",
+            style: TextStyle(fontSize: 20),
+          ),
+        ],
+      );
     } else if (index == 0) {
       return _medicamentos();
     } else if (index == 1) {
@@ -167,10 +175,10 @@ class AddPageState extends State<AddPage> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               RoundCheckboxWithLabel(
-                value: false,
+                value: true,
                 onChanged: (value) {},
                 label: "L",
-                int: "1",
+                int: "0",
               ),
               RoundCheckboxWithLabel(
                 value: false,
@@ -735,22 +743,28 @@ class RoundCheckboxWithLabel extends StatefulWidget {
   final String label;
   final String int;
 
-  RoundCheckboxWithLabel(
-      {required this.value,
-      required this.onChanged,
-      required this.label,
-      required this.int});
+  RoundCheckboxWithLabel({
+    required this.value,
+    required this.onChanged,
+    required this.label,
+    required this.int,
+  });
 
   @override
   _RoundCheckboxWithLabelState createState() => _RoundCheckboxWithLabelState();
 }
 
 class _RoundCheckboxWithLabelState extends State<RoundCheckboxWithLabel> {
+  bool isChecked = false;
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        widget.onChanged(!widget.value);
+        setState(() {
+          isChecked = !isChecked;
+        });
+        widget.onChanged(isChecked);
       },
       child: Column(
         children: [
@@ -760,16 +774,23 @@ class _RoundCheckboxWithLabelState extends State<RoundCheckboxWithLabel> {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
-                color: const Color.fromARGB(255, 17, 0, 255),
+                color: isChecked
+                    ? const Color.fromARGB(255, 17, 0, 255)
+                    : Colors.grey, // Cambia el color cuando es presionado
               ),
+              color: isChecked
+                  ? const Color.fromARGB(255, 17, 0, 255)
+                  : Colors.transparent,
             ),
-            child: const Center(
-              child: Icon(
-                Icons.check,
-                size: 18.0,
-                color: Color.fromARGB(255, 17, 0, 255),
-              ),
-            ),
+            child: isChecked
+                ? const Center(
+                    child: Icon(
+                      Icons.check,
+                      size: 18.0,
+                      color: Colors.white,
+                    ),
+                  )
+                : null,
           ),
           const SizedBox(height: 4), // Espaciado entre el checkbox y el texto
           Text(widget.label),

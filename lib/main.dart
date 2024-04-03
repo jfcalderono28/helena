@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:helena/pages/add_page.dart';
+import 'package:helena/pages/calendar_page.dart';
+import 'package:helena/pages/food_page.dart';
 import 'package:helena/pages/pills_page.dart';
 
 void main() => runApp(const MyApp());
@@ -19,6 +21,10 @@ class MyApp extends StatelessWidget {
       onTap: () {
         if (index == 0) {
           Navigator.of(context).pushNamed('/pills');
+        } else if (index == 1) {
+          Navigator.of(context).pushNamed('/alimentos');
+        } else if (index == 2) {
+          Navigator.of(context).pushNamed('/calendario');
         }
       },
     );
@@ -210,6 +216,8 @@ class MyApp extends StatelessWidget {
         '/': (context) => _home(context),
         '/add': (context) => const AddPage(),
         '/pills': (context) => const Pills(),
+        '/alimentos': (context) => const Food(),
+        '/calendario': (context) => const Calendar(),
       },
     );
   }
