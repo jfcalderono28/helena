@@ -1,223 +1,87 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:helena/pages/add_page.dart';
-import 'package:helena/pages/calendar_page.dart';
-import 'package:helena/pages/food_page.dart';
-import 'package:helena/pages/pills_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:helena/administrador/alimentacion/alergiaAlimentoNueva.dart';
+import 'package:helena/administrador/configA.dart';
+import 'package:helena/administrador/medicina/alergiaMedicaNueva.dart';
+import 'package:helena/administrador/medicina/medicamentoNuevo.dart';
+import 'package:helena/administrador/medicina/medicina.dart';
+import 'package:helena/administrador/usuarios.dart';
+import 'package:helena/iniciarSesion/iniciarSesionAdmin.dart';
+import 'package:helena/iniciarSesion/iniciarSesionCuidador.dart';
+import 'package:helena/iniciarSesion/iniciarSesionPaciente.dart';
+import 'package:helena/login/paginaInicial.dart';
+import 'package:helena/login/registro.dart';
+import 'package:helena/login/registroCuidador.dart';
+import 'package:helena/login/registroPaciente.dart';
+import 'package:helena/paginasCuidador/add_page.dart';
+import 'package:helena/paginasCuidador/buscar_page.dart';
+import 'package:helena/paginasCuidador/calendar_page.dart';
+import 'package:helena/paginasCuidador/config.dart';
+import 'package:helena/paginasCuidador/food_page.dart';
+import 'package:helena/paginasCuidador/pills_page.dart';
+import 'package:helena/paginasPaciente/anhadirCuidador.dart';
+import 'package:helena/administrador/paginaInicialAdmin.dart';
+import 'package:helena/paginasCuidador/paginaInicialCuidador.dart';
+import 'package:helena/paginasPaciente/configP.dart';
+import 'package:helena/paginasPaciente/paginaInicialPaciente.dart';
+import 'package:helena/iniciarSesion/iniciarSesion.dart';
+import 'firebase_options.dart';
 
-void main() => runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  Widget _bottomAction(IconData icon, int index, BuildContext context) {
-    //botones de la barra inferior
-    return InkWell(
-      child: Icon(
-        icon,
-        size: 35,
-        color: const Color.fromARGB(255, 255, 255, 255),
-      ),
-      onTap: () {
-        if (index == 0) {
-          Navigator.of(context).pushNamed('/pills');
-        } else if (index == 1) {
-          Navigator.of(context).pushNamed('/alimentos');
-        } else if (index == 2) {
-          Navigator.of(context).pushNamed('/calendario');
-        }
-      },
-    );
-  }
-
-  Widget _medicina(BuildContext context) {
-    return Center(
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.50,
-        height: MediaQuery.of(context).size.height * 0.40,
-        child: const Column(
-          mainAxisAlignment:
-              MainAxisAlignment.center, // Centra los elementos verticalmente
-          children: [
-            Icon(
-              FontAwesomeIcons.pills,
-              size: 150,
-              color: Color.fromARGB(255, 0, 208, 255),
-            ),
-            Text("Próximo medicamento",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17)),
-            Text("Acetaminofen", style: TextStyle(fontSize: 15)),
-            Text("12:00 pm", style: TextStyle(fontSize: 13))
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _alimentacion(BuildContext context) {
-    return Center(
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.50,
-        height: MediaQuery.of(context).size.height * 0.40,
-        child: Container(
-          color: const Color.fromARGB(55, 158, 158, 158), // Color de fondo gris
-          child: const Column(
-            mainAxisAlignment:
-                MainAxisAlignment.center, // Centra los elementos verticalmente
-            children: [
-              Icon(
-                FontAwesomeIcons.bowlRice,
-                size: 150,
-                color: Color(0xFF019C71),
-              ),
-              Text("Última cena",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17)),
-              Text("Desayuno", style: TextStyle(fontSize: 15)),
-              Text("9:00 am", style: TextStyle(fontSize: 13))
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _citas(BuildContext context) {
-    return Center(
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.50,
-        height: MediaQuery.of(context).size.height * 0.41,
-        child: Container(
-          color: const Color.fromARGB(55, 158, 158, 158), // Color de fondo gris
-          child: const Column(
-            mainAxisAlignment:
-                MainAxisAlignment.center, // Centra los elementos verticalmente
-            children: [
-              Icon(
-                FontAwesomeIcons.calendarDays,
-                size: 150,
-                color: Color(0xFF019C71),
-              ),
-              Text(""),
-              Text("Próxima cita",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17)),
-              Text("Endocrinología", style: TextStyle(fontSize: 15)),
-              Text("24-10-2023", style: TextStyle(fontSize: 13)),
-              Text("11:00 am", style: TextStyle(fontSize: 13))
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _ubicacion(BuildContext context) {
-    return Center(
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.50,
-        height: MediaQuery.of(context).size.height * 0.41,
-        child: const Column(
-          mainAxisAlignment:
-              MainAxisAlignment.center, // Centra los elementos verticalmente
-          children: [
-            Icon(
-              FontAwesomeIcons.locationDot,
-              size: 150,
-              color: Color.fromARGB(255, 0, 208, 255),
-            ),
-            Text(""),
-            Text(""),
-            Text("Ubicación actual",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17)),
-            Text("Terreros-Soacha-Colombia", style: TextStyle(fontSize: 13))
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _body(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _medicina(context),
-            _alimentacion(context),
-          ],
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [_citas(context), _ubicacion(context)],
-        )
-      ],
-    );
-  }
-
-  Widget _home(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: const Color(0xFF019C71),
-          title: const Row(
-            children: [
-              Padding(padding: EdgeInsets.only(left: 10)),
-              Text(
-                "Maria Helena Orjuela",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(width: 155),
-              Icon(FontAwesomeIcons.comment),
-            ],
-          )),
-
-      body: _body(context),
-
-      bottomNavigationBar: BottomAppBar(
-        //color de la barra inferior
-        color: const Color(0xFF019C71),
-        notchMargin: 5.0,
-        shape: const CircularNotchedRectangle(),
-        height: 75,
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _bottomAction(FontAwesomeIcons.pills, 0, context),
-            _bottomAction(FontAwesomeIcons.bowlRice, 1, context),
-            const SizedBox(width: 10),
-            _bottomAction(FontAwesomeIcons.calendarDays, 2, context),
-            _bottomAction(FontAwesomeIcons.locationDot, 3, context),
-          ],
-        ),
-      ),
-      //botón circular de la barra
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color.fromARGB(255, 0, 208, 255),
-        child: const Icon(
-          Icons.add,
-        ),
-        onPressed: () {
-          Navigator.of(context).pushNamed('/add');
-        },
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Material App',
+      initialRoute: "/",
       routes: {
-        '/': (context) => _home(context),
+        "/": (BuildContext context) => const Inicial(),
+        "iniciarSesion": (BuildContext context) => const InicioSesion(),
+        "registro": (BuildContext context) => const Registro(),
+        // Paciente
+        "iniciarSesionPaciente": (BuildContext context) =>
+            const IniciarSesionPaciente(),
+        "inicioPaciente": (BuildContext context) =>
+            const PaginaInicioPaciente(),
+        "registroPaciente": (BuildContext context) => const RegistroPaciente(),
+        "addCuidador": (BuildContext context) => const addCuidador(),
+        'configP': (context) => const ConfigP(),
+        // Cuidador
+        "registroCuidador": (BuildContext context) => const Registrocuidador(),
+        "iniciarSesionCuidador": (BuildContext context) =>
+            const IniciarSesionCuidador(),
+        "inicioCuidador": (BuildContext context) =>
+            const PaginaInicioCuidador(),
+        // Admin
+        "iniciarsesionadmi": (BuildContext context) =>
+            const IniciarAdministrador(),
+        'configA': (context) => const ConfigA(),
+        "PaginaInicioAdmin": (BuildContext context) =>
+            const PaginaInicioAdmin(),
+        "Usuarios": (BuildContext context) => const Usuarios(),
+        "Medicina": (BuildContext context) => const Medicina(),
+        "medicamentoNuevo": (BuildContext context) => const MedicamentoNuevo(),
+        "alergiaMedicaNueva": (BuildContext context) =>
+            const AlergiaMedicaNueva(),
+        "alergiaAlimentoNueva": (BuildContext context) =>
+            const AlergiaAlimentoNueva(),
+        // Rutas adicionales del segundo archivo
         '/add': (context) => const AddPage(),
         '/pills': (context) => const Pills(),
-        '/alimentos': (context) => const Food(),
         '/calendario': (context) => const Calendar(),
+        '/alimentos': (context) => const Food(),
+        '/buscar': (context) => const Buscar(),
+        '/config': (context) => const Config(),
       },
     );
   }
